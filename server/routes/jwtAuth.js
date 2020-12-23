@@ -9,7 +9,7 @@ const authorization = require("../middleware/authorization");
 // registering
 
 router.post("/register", validation, async (req, res) => {
-  const {firstName, lastName, phoneNumber, email, password, maritalStatus, gender, placeOfBirth, dateOfBirth } = req.body;
+  const {firstName, lastName, phoneNumber, email, passwordUser, maritalStatus, gender, placeOfBirth, dateOfBirth } = req.body;
 
   try {
     // check if the user exist
@@ -23,7 +23,7 @@ router.post("/register", validation, async (req, res) => {
     }
     //Bcrypt the password
     const salt = await bcrypt.genSalt(10);
-    const bcryptPassword = await bcrypt.hash(password, salt);
+    const bcryptPassword = await bcrypt.hash(passwordUser, salt);
 
     // insert the user into db
     // returning * - returns the data back to us 
@@ -46,7 +46,7 @@ router.post("/register", validation, async (req, res) => {
 
 router.post("/login", validation, async (req, res) => {
   // Destructure the request body
-  const { email, password } = req.body;
+  const { email, passwordUser } = req.body;
 
   try {
     // check if user doesnt exist
@@ -62,7 +62,7 @@ router.post("/login", validation, async (req, res) => {
 
     // check if the req password is equals to the one in db
     const validPassword = await bcrypt.compare(
-      password,
+      passwordUser,
       user.rows[0].passwordUser
     );
 
