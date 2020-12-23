@@ -2,14 +2,14 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const pool = require("../dbConnection");
-//const validInfo = require("../middleware/validInfo");
+const validation = require("../middleware/validation");
 const jwtGenerator = require("../utils/jwtGenerator");
-//const authorize = require("../middleware/authorize");
+const authorization = require("../middleware/authorization");
 
 // registering
 
-router.post("/register", async (req, res) => {
-  const {firstName, lastName, phoneNumber, email, passwordUser, maritalStatus, gender, placeOfBirth, dateOfBirth } = req.body;
+router.post("/register", validation, async (req, res) => {
+  const {firstName, lastName, phoneNumber, email, password, maritalStatus, gender, placeOfBirth, dateOfBirth } = req.body;
 
   try {
     // check if the user exist
@@ -23,7 +23,7 @@ router.post("/register", async (req, res) => {
     }
     //Bcrypt the password
     const salt = await bcrypt.genSalt(10);
-    const bcryptPassword = await bcrypt.hash(passwordUser, salt);
+    const bcryptPassword = await bcrypt.hash(password, salt);
 
     // insert the user into db
     // returning * - returns the data back to us 
@@ -44,15 +44,16 @@ router.post("/register", async (req, res) => {
 
 // Login 
 
-router.post("/login",  async (req, res) => {
+router.post("/login", validation, async (req, res) => {
   // Destructure the request body
-  const { email, passwordUser } = req.body;
+  const { email, password } = req.body;
 
   try {
     // check if user doesnt exist
     const user = await pool.query("SELECT * FROM users WHERE email = $1", [
       email
     ]);
+
     //if user doesnt exist 
     if (user.rows.length === 0) {
       //401 - unauthenticated 
@@ -61,7 +62,7 @@ router.post("/login",  async (req, res) => {
 
     // check if the req password is equals to the one in db
     const validPassword = await bcrypt.compare(
-      passwordUser,
+      password,
       user.rows[0].passwordUser
     );
 
@@ -79,5 +80,14 @@ router.post("/login",  async (req, res) => {
   }
 });
 
+// It verifies the token when ever the application is refreshed. 
+router.get("/verify", authorization, async (req, res) => {
+  try {
+    res.json(true);
+  } catch (err) {
+    //console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
     
 module.exports = router;
