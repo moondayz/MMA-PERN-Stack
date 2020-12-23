@@ -1,25 +1,28 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { Fragment } from 'react';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
+//components
+import Dashboard from './components/Dashboard';
+import Register from './components/Register';
+import Login from './components/Login';
+
+// <Route exact path='/login' render={props}/> exact prevents clashing the urls, uris - 
+// render props , doesnt remout each time after sending the props
+ 
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  return <Fragment>
+    <Router>
+      <div className="container">
+        <Switch>
+          <Route exact path='/login' render={props => <Login {...props} /> }/> 
+          <Route exact path='/register' render={props => <Register {...props} /> } />
+          <Route exact path='/dashboard' render={props => <Dashboard {...props} /> } />
+        </Switch>
+      </div>
+    </Router>
+  </Fragment>
+
 }
 
 export default App;
