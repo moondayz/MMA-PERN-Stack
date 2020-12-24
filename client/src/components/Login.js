@@ -64,9 +64,11 @@ const Login = ({ setAuth }) => {
           onChange={e => onChange(e)}
           className="form-control my-3"
         />
-        <button class="btn btn-success btn-block">Submit</button>
+        <button class="btn btn-primary btn-block" >Submit</button>
       </form>
-      <Link to="/register">register</Link>
+      <div class="text-right">
+        <Link to="/register" class="badge badge-secondary">Register</Link>
+      </div>
     </Fragment>
   );
 };

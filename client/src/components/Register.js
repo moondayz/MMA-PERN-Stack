@@ -56,14 +56,16 @@ const Register = ({ setAuth }) => {
     <Fragment>
       <h1 className="mt-5 text-center">Register Form</h1>
       <form onSubmit={onSubmitForm}>
-        <input
-          type="text"
-          name="firstName"
-          value={firstName}
-          placeholder="First name"
-          onChange={e => onChange(e)}
-          className="form-control my-3"
-        />
+        
+          <input
+            type="text"
+            name="firstName"
+            value={firstName}
+            placeholder="First name"
+            onChange={e => onChange(e)}
+            className="form-control my-3"
+          />
+
         <input
           type="text"
           name="lastName"
@@ -96,22 +98,30 @@ const Register = ({ setAuth }) => {
           onChange={e => onChange(e)}
           className="form-control my-3"
         />
-        <input
+        <select
           type="text"
           name="maritalStatus"
           value={maritalStatus}
-          placeholder="marital Status"
+          id="exampleFormControlSelect1"
           onChange={e => onChange(e)}
-          className="form-control my-3"
-        />
-        <input
+          className="form-control my-3">
+          <option value='Single'>Single</option>
+          <option value='Married'>Married</option>
+
+        </select>
+
+        <select
           type="text"
           name="gender"
           value={gender}
-          placeholder="Gender"
+          id="exampleFormControlSelect1"
           onChange={e => onChange(e)}
-          className="form-control my-3"
-        />
+          className="form-control my-3">
+          <option value='Female'>Female</option>
+          <option value='Male'>Male</option>
+
+        </select>
+
         <input
           type="placeOfBirth"
           name="placeOfBirth"
@@ -129,9 +139,12 @@ const Register = ({ setAuth }) => {
           className="form-control my-3"
         />
 
-        <button className="btn btn-success btn-block">Submit</button>
+        <button className="btn btn-primary btn-block">Submit</button>
       </form>
-      <Link to="/login">login</Link>
+      <div class="text-right">
+        <Link to="/login" class="badge badge-pill badge-danger" >Login</Link>
+      </div>
+
     </Fragment>
   );
 };
