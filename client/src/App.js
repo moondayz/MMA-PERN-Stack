@@ -1,16 +1,40 @@
-import './App.css';
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
+
 //components
 import Dashboard from './components/Dashboard';
 import Register from './components/Register';
 import Login from './components/Login';
 
+
 // <Route exact path='/login' render={props}/> exact prevents clashing the urls, uris - 
 // render props , doesnt remout each time after sending the props
 
+toast.configure(); 
 
 function App() {
+
+  // Validate JWT token when refreshed
+  const checkAuthenticated = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/auth/verify", {
+        method: "GET",
+        headers: { jwt_token: localStorage.token }
+      });
+
+      const parseRes = await res.json();
+
+      parseRes === true ? setIsAuthenticated(true) : setIsAuthenticated(false);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  useEffect(() => {
+    checkAuthenticated();
+  }, []); // runs only once when rendered thanks to []
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -18,7 +42,8 @@ function App() {
     setIsAuthenticated(boolean);
   };
 
-  return <Fragment>
+  return (
+  <Fragment>
     <Router>
       <div className="container">
         <Switch>
@@ -41,7 +66,7 @@ function App() {
       </div>
     </Router>
   </Fragment>
-
+  )
 }
 
 export default App;
