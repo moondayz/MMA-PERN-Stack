@@ -7,8 +7,8 @@ module.exports = router;
 router.get("/", authorization, async (req, res) => {
   try {
     const user = await pool.query(
-      "SELECT lastName FROM users WHERE idUser = $1",
-      [req.user.id] 
+      "SELECT firstname FROM users WHERE idUser = $1",
+      [req.user.iduser] 
     ); 
     
     res.json(user.rows[0]);

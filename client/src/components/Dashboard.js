@@ -1,10 +1,52 @@
-import React, { Fragment } from 'react'
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
-const Dashboard = () => {
+const Dashboard = ({ setAuth }) => {
+    const [name, setName] = useState("");
+
+    const getProfile = async () => {
+        try {
+            const response = await fetch("http://localhost:5000/dashboard/", {
+                method: "GET",
+                headers: { jwt_token: localStorage.token }
+
+            });
+
+            // returns an empty object
+           const parseData = await JSON.parse(JSON.stringify(response));
+        //  const parseData = await response.json();
+            console.log(parseData);
+            setName(parseData.firstname);
+        } catch (err) {
+            console.error(err.message);
+        }
+    };
+
+    const logout = async e => {
+        e.preventDefault();
+        try {
+            localStorage.removeItem("token");
+            setAuth(false);
+            toast.success("Logout successfully");
+        } catch (err) {
+            console.error(err.message);
+        }
+    };
+
+    useEffect(() => {
+        getProfile();
+    }, []);
+
+    // [] --> makes only one request when its rendered
+
     return (
-        <Fragment>
-            <h1>Dashboard</h1>
-        </Fragment>
+        <div>
+            <h1 className="mt-5">Dashboard</h1>
+            <h2>Welcome {name}</h2>
+            <button onClick={e => logout(e)} className="btn btn-primary">
+                Logout
+        </button>
+        </div>
     );
 };
 
