@@ -9,14 +9,14 @@ const authorization = require("../middleware/authorization");
 // registering
 
 router.post("/register", validation, async (req, res) => {
-  const {firstName, lastName, phoneNumber, email, passwordUser, maritalStatus, gender, placeOfBirth, dateOfBirth } = req.body;
+  const { firstName, lastName, phoneNumber, email, passwordUser, maritalStatus, gender, placeOfBirth, dateOfBirth } = req.body;
 
   try {
     // check if the user exist
     const user = await pool.query("SELECT * FROM users WHERE email = $1", [
       email
-    ]); 
-    
+    ]);
+
     //res.json(user.rows[0]);
     if (user.rows.length > 0) {
       return res.status(401).json("User already exist!");
@@ -29,13 +29,13 @@ router.post("/register", validation, async (req, res) => {
     // returning * - returns the data back to us 
     let newUser = await pool.query(
       "INSERT INTO users (firstName, lastName, phoneNumber, email, passwordUser, maritalStatus, gender, placeOfBirth, dateOfBirth) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *",
-      [firstName, lastName, phoneNumber, email, bcryptPassword, maritalStatus, gender, placeOfBirth, dateOfBirth ]
+      [firstName, lastName, phoneNumber, email, bcryptPassword, maritalStatus, gender, placeOfBirth, dateOfBirth]
     );
-    
+
     // Generate the jwt
     const jwtToken = jwtGenerator(newUser.rows[0].idUser);
 
-   res.json({ jwtToken });
+    res.json({ jwtToken });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
@@ -44,27 +44,30 @@ router.post("/register", validation, async (req, res) => {
 
 // Login 
 
-router.post("/login", validation, async (req, res) => {
+router.post("/login", async (req, res) => {
   // Destructure the request body
-  const { email, passwordUser } = req.body;
+  const { email, password } = req.body;
 
   try {
+    console.log(email);
     // check if user doesnt exist
-    const user = await pool.query("SELECT * FROM users WHERE email = $1", [
-      email
-    ]);
 
+    const user = await pool.query(`SELECT * FROM users where email = '${email}' `);
+   // const hash = await pool.query(`SELECT passwordUser FROM users where email = '${email}' `);
+
+    console.log(user.rows.length);
     //if user doesnt exist 
     if (user.rows.length === 0) {
       //401 - unauthenticated 
-      return res.status(401).json("Password or email is incorrect");
+      console.log(user.rows.length)
+      return res.status(401).json("Incorrect credentials");
     }
 
+  //  const hashed = hash.rows[0].passworduser
     // check if the req password is equals to the one in db
-    const validPassword = await bcrypt.compare(
-      passwordUser,
-      user.rows[0].passwordUser
-    );
+    const validPassword = await bcrypt.compare(password, user.rows[0].passworduser);
+
+    console.log(validPassword);
 
     if (!validPassword) {
       return res.status(401).json("Password or email is incorrect");
@@ -73,7 +76,7 @@ router.post("/login", validation, async (req, res) => {
     // generate the jwt if all ok
     const jwtToken = jwtGenerator(user.rows[0].idUser);
     return res.json({ jwtToken });
-    
+
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
@@ -89,5 +92,5 @@ router.get("/verify", authorization, async (req, res) => {
     res.status(500).send("Server error");
   }
 });
-    
+
 module.exports = router;
