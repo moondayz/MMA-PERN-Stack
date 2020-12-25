@@ -60,7 +60,7 @@ router.post("/login", async (req, res) => {
     if (user.rows.length === 0) {
       //401 - unauthenticated 
       console.log(user.rows.length)
-      return res.status(401).json("Incorrect credentials");
+      return res.status(401).json("Incorrect credentials - User doesnt exist");
     }
 
   //  const hashed = hash.rows[0].passworduser
@@ -70,7 +70,7 @@ router.post("/login", async (req, res) => {
     console.log(validPassword);
 
     if (!validPassword) {
-      return res.status(401).json("Password or email is incorrect");
+      return res.status(401).json("Password is incorrect");
     }
 
     // generate the jwt if all ok
@@ -83,7 +83,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// It verifies the token when ever the application is refreshed. 
+// It verifies the token when ever the application is refreshed.  - authorization
 router.get("/verify", authorization, async (req, res) => {
   try {
     res.json(true);
