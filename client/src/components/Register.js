@@ -78,7 +78,7 @@ const Register = ({ setAuth }) => {
           type="text"
           name="phoneNumber"
           value={phoneNumber}
-          placeholder="Phone number"
+          placeholder="eg. xxx-xxx-xxx"
           onChange={e => onChange(e)}
           className="form-control my-3"
         />
@@ -134,7 +134,7 @@ const Register = ({ setAuth }) => {
           type="text"
           name="dateOfBirth"
           value={dateOfBirth}
-          placeholder="Date Of Birth"
+          placeholder="eg. yyyy-mm-dd"
           onChange={e => onChange(e)}
           className="form-control my-3"
         />

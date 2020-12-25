@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import Dashboard from './components/Dashboard';
 import Register from './components/Register';
 import Login from './components/Login';
+import Home from './components/Home';
 
 
 // <Route exact path='/login' render={props}/> exact prevents clashing the urls, uris - 
@@ -47,6 +48,11 @@ function App() {
     <Router>
       <div className="container">
         <Switch>
+        <Route exact path='/' render={props => !isAuthenticated ? (
+            <Home {...props} setAuth={setAuth} />
+          ) : (
+              <Redirect to="/" />
+            )} />
           <Route exact path='/login' render={props => !isAuthenticated ? (
             <Login {...props} setAuth={setAuth} />
           ) : (

@@ -41,8 +41,9 @@ const Dashboard = ({ setAuth }) => {
 
     return (
         <div>
-            <h1 className="mt-5">Dashboard</h1>
-            <h2>Welcome {name}</h2>
+            <h1 className="mt-5 ml-5 "  >Membership Management App</h1>
+           <hr/>
+            <h3>Welcome to the dashboard page {name}</h3>
             <button onClick={e => logout(e)} className="btn btn-primary">
                 Logout
         </button>
