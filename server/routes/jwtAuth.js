@@ -33,7 +33,7 @@ router.post("/register", validation, async (req, res) => {
     );
 
     // Generate the jwt
-    const jwtToken = jwtGenerator(newUser.rows[0].idUser);
+    const jwtToken = jwtGenerator(newUser.rows[0].iduser);
 
     res.json({ jwtToken });
   } catch (err) {

@@ -8,8 +8,9 @@ router.get("/", authorization, async (req, res) => {
   try {
     const user = await pool.query(
       "SELECT firstname FROM users WHERE idUser = $1",
-      [req.user.iduser] 
+      [req.user.id] 
     ); 
+    // request e user nerede set edildi ?? header dan token parse edp id yi icinden cek. 
     
     res.json(user.rows[0]);
 

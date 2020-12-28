@@ -17,7 +17,8 @@ class Home extends Component {
                 <div class="alert alert-primary mt-5" role="alert">
                     <a class="navbar-brand mx-auto" href="/login">Login</a>
 
-                    <div class="float-right"> <a class="navbar-brand mx-auto" align="right" href="/Register">Register</a> </div>
+                    <div class="float-right"> 
+                    <a class="navbar-brand mx-auto" align="right" href="/Register">Register</a> </div>
 
                 </div>
 
